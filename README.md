@@ -15,6 +15,19 @@ There is **no database and no demo data**. The app reads Windows directly, and t
 > Run this on the PC you want to inspect. Deployed to a server, it would show the server's
 > processes instead of yours.
 
+## Screenshots
+
+Processes — grouped by app, with live CPU, memory, disk and network per process, risk
+severity, and real actions:
+
+![Processes page](docs/screenshots/processes.png)
+
+| Performance | Services |
+| --- | --- |
+| ![Performance page](docs/screenshots/performance.png) | ![Services page](docs/screenshots/services.png) |
+
+Screenshots were captured on a demo machine; host and user names are masked.
+
 ## Requirements
 
 - Windows 10 or 11
