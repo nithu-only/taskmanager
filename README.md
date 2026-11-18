@@ -216,6 +216,7 @@ unless specifically requested by the user or the person installing or operating 
 app reads process, service and startup information locally through Windows APIs and
 PowerShell, keeps it in memory on the local machine, and serves the UI only on the
 loopback interface (`127.0.0.1`). No telemetry, accounts or external services are used.
+See [PRIVACY.md](PRIVACY.md) for details.
 
 ## License
 
