@@ -113,6 +113,27 @@ if (-not (Test-Path $icon)) {
     $bmp.Dispose()
 }
 
+$numericVersion = "1.0.0.0"
+if ($version -match '^(\d+)\.(\d+)\.(\d+)') {
+    $numericVersion = "$($Matches[1]).$($Matches[2]).$($Matches[3]).0"
+}
+
+# Explorer and SignPath both read these; keep them in sync with package.json.
+$assemblyInfo = @"
+using System.Reflection;
+
+[assembly: AssemblyTitle("Task Manager")]
+[assembly: AssemblyDescription("Windows Task Manager web app (portable)")]
+[assembly: AssemblyCompany("nithu-only")]
+[assembly: AssemblyProduct("Task Manager")]
+[assembly: AssemblyCopyright("Copyright (c) 2026 nithu-only")]
+[assembly: AssemblyVersion("$numericVersion")]
+[assembly: AssemblyFileVersion("$numericVersion")]
+[assembly: AssemblyInformationalVersion("$version")]
+"@
+$assemblyInfoPath = Join-Path $work "AssemblyInfo.cs"
+Set-Content -Path $assemblyInfoPath -Value $assemblyInfo -Encoding UTF8
+
 $cscArgs = @(
     "/nologo"
     "/target:winexe"
@@ -129,6 +150,7 @@ $cscArgs = @(
     "/reference:System.IO.Compression.dll"
     "/reference:System.IO.Compression.FileSystem.dll"
     (Join-Path $PSScriptRoot "Launcher.cs")
+    $assemblyInfoPath
 )
 
 & $csc @cscArgs

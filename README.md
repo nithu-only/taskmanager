@@ -72,6 +72,9 @@ Notes for distribution:
   Choose *More info → Run anyway*, or sign the exe with your own certificate
   (`signtool sign /fd SHA256 /a TaskManager.exe`).
 - Share only `TaskManager.exe`; nothing else needs to travel with it.
+- GitHub releases include `SHA256SUMS.txt` and a build attestation — see
+  [Verifying a release](#verifying-a-release). Once SignPath Foundation approves the
+  project, the exe is signed and shows a verified publisher.
 - To remove it, exit via the tray, delete the exe, then delete
   `%LOCALAPPDATA%\TaskManagerPortable`.
 - The executable targets Windows 10/11 x64 and must run on the PC you want to inspect.
@@ -163,3 +166,40 @@ src/components/     table, drawers, dialogs, shell
   Performance page shows CPU, memory, disk and network only.
 - Activity history, and the "suspended" badge, reset when the app restarts. Suspended
   processes stay suspended until you resume them or they exit.
+
+## Verifying a release
+
+Every GitHub release contains `TaskManager.exe` and `SHA256SUMS.txt`.
+
+```powershell
+# Windows PowerShell
+Get-FileHash .\TaskManager.exe -Algorithm SHA256
+# compare with the hash in SHA256SUMS.txt
+
+# Build provenance (GitHub artifact attestation)
+gh attestation verify .\TaskManager.exe --repo YOUR-GITHUB-USERNAME/taskmanager
+```
+
+Releases built by the `Release` workflow come from the tagged source in this repository.
+Once the project is approved by SignPath Foundation, the exe is also Authenticode-signed,
+so Windows shows a verified publisher instead of "Unknown publisher".
+
+## Code signing policy
+
+Free code signing provided by [SignPath.io](https://signpath.io/), certificate by
+[SignPath Foundation](https://signpath.org/).
+
+- Committers and reviewers: [repository collaborators](https://github.com/YOUR-GITHUB-USERNAME/taskmanager/settings/access)
+- Approvers: [@YOUR-GITHUB-USERNAME](https://github.com/YOUR-GITHUB-USERNAME)
+- Builds are produced only by the GitHub Actions workflows in `.github/workflows/`.
+  Each release is reviewed and manually approved before it is signed.
+
+**Privacy:** This program will not transfer any information to other networked systems
+unless specifically requested by the user or the person installing or operating it. The
+app reads process, service and startup information locally through Windows APIs and
+PowerShell, keeps it in memory on the local machine, and serves the UI only on the
+loopback interface (`127.0.0.1`). No telemetry, accounts or external services are used.
+
+## License
+
+[MIT](LICENSE) © 2026 nithu-only
