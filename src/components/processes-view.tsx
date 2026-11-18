@@ -248,6 +248,7 @@ export default function ProcessesView({ variant }: { variant: Variant }) {
   const [menu, setMenu] = useState<{ x: number; y: number; id: number } | null>(null);
   const [busy, setBusy] = useState(false);
   const nonce = useRef(0);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   const columns = variant === "processes" ? PROCESS_COLS : DETAIL_COLS;
   const now = data ? Date.parse(data.serverTime) : 0;
@@ -399,6 +400,20 @@ export default function ProcessesView({ variant }: { variant: Variant }) {
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [endTarget, form, menu, selectedId, bulkEnd, checked]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== "k" || !(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey) return;
+      if (endTarget !== null || form || bulkEnd) return;
+      const t = e.target;
+      if (t instanceof HTMLElement && (t.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(t.tagName))) return;
+      e.preventDefault();
+      searchRef.current?.focus();
+      searchRef.current?.select();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [endTarget, form, bulkEnd]);
 
   const clearFilters = () => {
     setQuery("");
@@ -777,11 +792,13 @@ export default function ProcessesView({ variant }: { variant: Variant }) {
         <div className="relative min-w-0 flex-1 basis-48">
           <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-subtle" aria-hidden />
           <input
+            ref={searchRef}
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search name, PID or user"
             aria-label="Search processes"
+            aria-keyshortcuts="Control+K"
             className={cx(inputClass, "pl-8")}
           />
         </div>
