@@ -220,6 +220,16 @@ PowerShell, keeps it in memory on the local machine, and serves the UI only on t
 loopback interface (`127.0.0.1`). No telemetry, accounts or external services are used.
 See [PRIVACY.md](PRIVACY.md) for details.
 
+## Contributing
+
+Bug reports and pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) covers the
+development setup, the checks CI runs, and the safety rules for process, service and
+startup changes. Security issues go through [SECURITY.md](SECURITY.md); behaviour in
+issues and pull requests is covered by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+Good starting points are tagged
+[`good first issue`](https://github.com/nithu-only/taskmanager/labels/good%20first%20issue).
+
 ## License
 
 [MIT](LICENSE) © 2026 nithu-only

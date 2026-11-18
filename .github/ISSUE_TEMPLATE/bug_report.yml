@@ -1,0 +1,91 @@
+name: Bug report
+description: The app shows wrong data, a page fails, or the exe will not start.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please **do not paste logs that contain your username,
+        hostname or full file paths** — replace them with `demo` / `DESKTOP-DEMO`.
+        Security issues belong in [SECURITY.md](../blob/main/SECURITY.md), not here.
+
+  - type: dropdown
+    id: run-mode
+    attributes:
+      label: How are you running it?
+      options:
+        - TaskManager.exe from a release
+        - Built from source (npm run dev)
+        - Built from source (npm run build / npm start)
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      description: Release tag (e.g. v1.0.0) or the commit you built from.
+      placeholder: v1.0.0
+    validations:
+      required: true
+
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      description: Run `winver` if you are not sure.
+      placeholder: Windows 11 24H2 (build 26100)
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the Processes page
+        2. Sort by CPU
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+      description: Include the error message shown in the UI, if any.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Server log (optional)
+      description: |
+        Portable build: tray menu → **Show server log**.
+        From source: the terminal running the server.
+      render: text
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots (optional)
+      description: Mask hostnames, usernames and paths before attaching.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: This is not a security report (those go to SECURITY.md).
+          required: true
