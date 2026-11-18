@@ -1,5 +1,9 @@
 # Task Manager for Windows
 
+[![CI](https://github.com/nithu-only/taskmanager/actions/workflows/ci.yml/badge.svg)](https://github.com/nithu-only/taskmanager/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/nithu-only/taskmanager)](https://github.com/nithu-only/taskmanager/releases/latest)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A local web app that shows what is actually happening on **your** PC — which process is
 using the memory, which one is pinning the CPU, what starts with Windows, and what the
 services are doing. It looks like the Windows Task Manager, but every number comes from the

@@ -21,10 +21,10 @@ jobs:
 
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
@@ -44,7 +44,7 @@ jobs:
 
       - name: Upload unsigned exe
         id: upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: unsigned
           path: packaging/out/TaskManager.exe
@@ -56,7 +56,7 @@ jobs:
       #   3. Add SIGNPATH_ORGANIZATION_ID as a repository variable.
       - name: Sign with SignPath
         if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
-        uses: signpath/github-action-submit-signing-request@v1
+        uses: signpath/github-action-submit-signing-request@v2
         with:
           api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
           organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
@@ -89,7 +89,7 @@ jobs:
           Get-Content "dist/SHA256SUMS.txt"
 
       - name: Attest build provenance
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: dist/TaskManager.exe
 
