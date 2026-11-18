@@ -82,6 +82,27 @@ const DETAIL_COLS: Col[] = [
   { key: "description", label: "Description", cls: "hidden @7xl:table-cell" },
 ];
 
+const SORT_KEYS: SortKey[] = ["name", "pid", "status", "user", "cpu", "memory", "disk", "network", "severity", "priority", "arch", "threads", "handles", "description"];
+
+const sortStorageKey = (variant: Variant) => `tm-${variant}-sort`;
+
+// Reads a saved sort and rejects anything that is not a known column of this
+// table, so a stale or hand-edited value falls back to the default.
+function readSavedSort(variant: Variant, cols: Col[]): { key: SortKey; dir: 1 | -1 } | null {
+  try {
+    const raw = localStorage.getItem(sortStorageKey(variant));
+    if (!raw) return null;
+    const saved: unknown = JSON.parse(raw);
+    if (typeof saved !== "object" || saved === null) return null;
+    const { key, dir } = saved as { key?: unknown; dir?: unknown };
+    if (typeof key !== "string" || !SORT_KEYS.includes(key as SortKey) || !cols.some((c) => c.key === key)) return null;
+    if (dir !== 1 && dir !== -1) return null;
+    return { key: key as SortKey, dir };
+  } catch {
+    return null;
+  }
+}
+
 const DESC_FIRST: SortKey[] = ["cpu", "memory", "disk", "network", "threads", "handles", "severity"];
 
 const HEAT = [0, 7, 14, 24, 36, 50];
@@ -408,7 +429,23 @@ export default function ProcessesView({ variant }: { variant: Variant }) {
     setFUser("all");
   };
 
-  const toggleSort = (key: SortKey) => setSort((s) => (s.key === key ? { key, dir: s.dir === 1 ? -1 : 1 } : { key, dir: DESC_FIRST.includes(key) ? -1 : 1 }));
+  // Restore after mount rather than in the useState initialiser, which would
+  // differ from the server render and cause a hydration mismatch.
+  useEffect(() => {
+    const saved = readSavedSort(variant, columns);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (saved) setSort(saved);
+  }, [variant, columns]);
+
+  const toggleSort = (key: SortKey) => {
+    const next: { key: SortKey; dir: 1 | -1 } = sort.key === key ? { key, dir: sort.dir === 1 ? -1 : 1 } : { key, dir: DESC_FIRST.includes(key) ? -1 : 1 };
+    setSort(next);
+    try {
+      localStorage.setItem(sortStorageKey(variant), JSON.stringify(next));
+    } catch {
+      /* storage unavailable: the choice just won't persist */
+    }
+  };
 
   const setOpen = (id: number, open: boolean | "toggle") =>
     setExpanded((prev) => {
