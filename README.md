@@ -220,6 +220,37 @@ PowerShell, keeps it in memory on the local machine, and serves the UI only on t
 loopback interface (`127.0.0.1`). No telemetry, accounts or external services are used.
 See [PRIVACY.md](PRIVACY.md) for details.
 
+## Troubleshooting
+
+**Windows says "Windows protected your PC".** The exe is not code-signed, so SmartScreen
+warns about it. Choose *More info → Run anyway*, or run `Unblock-File .\TaskManager.exe` in
+PowerShell first. To check the download instead of trusting it, follow
+[Verifying a release](#verifying-a-release).
+
+**The browser opens but the page is blank, or says "can't reach this page".** The server
+listens on a random free loopback port (`http://127.0.0.1:<port>`), so the address changes
+between runs; reopen it from the tray icon rather than from an old bookmark. If it still
+fails, use tray → *Show server log* or open `%LOCALAPPDATA%\TaskManagerPortable\server.log`.
+See [Portable exe](#portable-exe-share-with-other-users) for how the launcher starts.
+
+**A service will not stop and Windows says "Access is denied".** Windows requires
+administrator rights for most service operations. The app shows the Windows error instead of
+retrying with elevation, so close it and start it again as administrator if you need to
+change that service.
+
+**Antivirus flags the exe or the PowerShell scripts.** The exe is an unsigned single file
+that starts PowerShell to read the machine, which looks suspicious to some scanners. The
+source is public, and releases ship `SHA256SUMS.txt` and a build attestation (see
+[Verifying a release](#verifying-a-release)). Do not disable your antivirus; verify the
+download and, if needed, report a false positive to the vendor.
+
+**How do I remove it?** Choose *Exit* from the tray menu, delete `TaskManager.exe`, then
+delete the `%LOCALAPPDATA%\TaskManagerPortable` folder. Nothing else is installed.
+
+**Why is per-process network usage 0?** Windows does not expose reliable per-process
+network usage without a filter driver, so only the system total, taken from the adapter
+counters, is measured. See [How the data gets here](#how-the-data-gets-here).
+
 ## Contributing
 
 Bug reports and pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) covers the
