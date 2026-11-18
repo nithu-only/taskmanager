@@ -17,6 +17,9 @@ There is **no database and no demo data**. The app reads Windows directly, and t
 - Node.js 20 or newer
 - Windows PowerShell 5.1 (installed with Windows — `pwsh` is **not** required)
 
+The portable `TaskManager.exe` below bundles its own Node.js runtime, so end users
+need none of these installed.
+
 No `npm install` of native modules is needed, and no environment variables or connection
 strings are used.
 
@@ -38,6 +41,40 @@ Other scripts:
 | `npm start` | Serve the production build |
 | `npm run typecheck` | TypeScript, no emit |
 | `npm run lint` | ESLint |
+| `npm run package:exe` | Build a portable, single-file `TaskManager.exe` |
+
+## Portable exe (share with other users)
+
+`npm run package:exe` produces **`packaging/out/TaskManager.exe`** — one ~38 MB file
+that runs without Node.js installed. It contains the production build, the PowerShell
+helpers, and a private copy of `node.exe`.
+
+What happens when someone double-clicks it:
+
+1. On first run the payload is extracted to `%LOCALAPPDATA%\TaskManagerPortable\app-<version>`.
+2. The server starts on a free loopback port (`http://127.0.0.1:<port>`), so it is not
+   reachable from the network and Windows Firewall does not prompt.
+3. The UI opens in the default browser, and a tray icon keeps the server running.
+
+Tray menu: **Open Task Manager**, **Show server log**, **Exit**. Exiting stops the Node
+server and the PowerShell sampler it started.
+
+Double-clicking the exe again just reopens the existing UI. To stop it from a script or
+shortcut:
+
+```powershell
+TaskManager.exe --stop
+```
+
+Notes for distribution:
+
+- The exe is **not code-signed**, so SmartScreen may show "Windows protected your PC".
+  Choose *More info → Run anyway*, or sign the exe with your own certificate
+  (`signtool sign /fd SHA256 /a TaskManager.exe`).
+- Share only `TaskManager.exe`; nothing else needs to travel with it.
+- To remove it, exit via the tray, delete the exe, then delete
+  `%LOCALAPPDATA%\TaskManagerPortable`.
+- The executable targets Windows 10/11 x64 and must run on the PC you want to inspect.
 
 ## How the data gets here
 

@@ -1,12 +1,14 @@
 {
   "name": "task-manager",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "package:exe": "powershell -NoProfile -ExecutionPolicy Bypass -File packaging/build-exe.ps1"
   },
   "dependencies": {
     "lucide-react": "^0.475.0",

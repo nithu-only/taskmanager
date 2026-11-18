@@ -20,3 +20,6 @@ scripts/versioninfo.json
 *.log
 Thumbs.db
 .DS_Store
+
+# portable exe output
+packaging/out/
