@@ -83,6 +83,8 @@ shortcut:
 TaskManager.exe --stop
 ```
 
+`TaskManager.exe --help` (or `-h`, `/?`) shows the supported arguments in a dialog.
+
 Notes for distribution:
 
 - The exe is **not code-signed**, so SmartScreen may show "Windows protected your PC".

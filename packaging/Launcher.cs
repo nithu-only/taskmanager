@@ -43,6 +43,13 @@ static class Program
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
 
+        // Handled first so it works whether or not the app is running.
+        if (HasArg(args, "--help") || HasArg(args, "-h") || HasArg(args, "/?"))
+        {
+            ShowHelp();
+            return;
+        }
+
         dataDir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "TaskManagerPortable");
@@ -457,6 +464,20 @@ static class Program
             try { node.Dispose(); } catch { }
             node = null;
         }
+    }
+
+    private static void ShowHelp()
+    {
+        MessageBox.Show(
+            "TaskManager.exe [option]
+
+" +
+            "(no arguments)   Start Task Manager, or reopen the UI if it is already running.
+" +
+            "--stop               Stop the running instance.
+" +
+            "--help, -h, /?     Show this help.",
+            AppTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private static void ShowError(string message)
