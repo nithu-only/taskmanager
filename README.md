@@ -1,4 +1,4 @@
-# Task Manager for Windows
+# Task Manager Portable for Windows
 
 [![CI](https://github.com/nithu-only/taskmanager/actions/workflows/ci.yml/badge.svg)](https://github.com/nithu-only/taskmanager/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/nithu-only/taskmanager)](https://github.com/nithu-only/taskmanager/releases/latest)
