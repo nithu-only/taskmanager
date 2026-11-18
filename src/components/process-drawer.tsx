@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
-import { Leaf, Pause, Pencil, Play, X, XCircle } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Check, Copy, Leaf, Pause, Pencil, Play, X, XCircle } from "lucide-react";
 import {
   CATEGORY_SINGULAR,
   PRIORITIES,
@@ -16,7 +16,7 @@ import {
   type Priority,
   type ProcessDTO,
 } from "@/lib/types";
-import { Button, Pill, ProcIcon, SEV_PANEL, SeverityBadge, cx, inputClass } from "./ui";
+import { Button, Pill, ProcIcon, SEV_PANEL, SeverityBadge, cx, inputClass, useToast } from "./ui";
 
 export function Spark({ values, color, className }: { values: number[]; color: string; className?: string }) {
   const list = values.length > 1 ? values : [values[0] ?? 0, values[0] ?? 0];
@@ -36,6 +36,39 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
       <dt className="w-28 shrink-0 text-xs text-muted">{label}</dt>
       <dd className="min-w-0 flex-1 text-sm break-words">{children}</dd>
     </div>
+  );
+}
+
+function CopyButton({ text, label }: { text: string; label: string }) {
+  const toast = useToast();
+  const [copied, setCopied] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  if (!text) return null;
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      clearTimeout(timer.current);
+      timer.current = setTimeout(() => setCopied(false), 1500);
+      toast({ tone: "success", title: `${label} copied` });
+    } catch {
+      toast({ tone: "error", title: `Couldn't copy the ${label.toLowerCase()}`, body: "The browser blocked clipboard access." });
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => void copy()}
+      aria-label={`Copy ${label.toLowerCase()}`}
+      title={`Copy ${label.toLowerCase()}`}
+      className="inline-grid size-6 shrink-0 place-items-center rounded-md align-middle text-muted hover:bg-hover hover:text-fg"
+    >
+      {copied ? <Check className="size-3.5" aria-hidden /> : <Copy className="size-3.5" aria-hidden />}
+    </button>
   );
 }
 
@@ -84,8 +117,11 @@ export function ProcessDrawer({
           <ProcIcon name={parent ? parent.name : proc.name} size="lg" />
           <div className="min-w-0 flex-1">
             <h2 className="text-base leading-snug font-semibold break-words">{proc.name}</h2>
-            <p className="truncate text-xs text-muted">
-              {proc.imageName} · PID {proc.pid}
+            <p className="flex items-center gap-1 text-xs text-muted">
+              <span className="min-w-0 truncate">
+                {proc.imageName} · PID {proc.pid}
+              </span>
+              <CopyButton text={String(proc.pid)} label="PID" />
             </p>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {proc.status === "not_responding" ? (
@@ -192,7 +228,8 @@ export function ProcessDrawer({
             {proc.description ? <Row label="Description">{proc.description}</Row> : null}
             {proc.commandLine ? (
               <Row label="Command line">
-                <code className="font-mono text-xs break-all">{proc.commandLine}</code>
+                <code className="font-mono text-xs break-all">{proc.commandLine}</code>{" "}
+                <CopyButton text={proc.commandLine} label="Command line" />
               </Row>
             ) : null}
             {parent ? (
