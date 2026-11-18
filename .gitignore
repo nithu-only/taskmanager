@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+*.tsbuildinfo
+
+# local sampler cache (rebuilds itself)
+scripts/versioninfo.json
+
+# browser automation output
+.playwright-mcp/
+
+# environment
+.env
+.env*.local
+
+# logs and OS files
+*.log
+Thumbs.db
+.DS_Store
