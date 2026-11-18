@@ -177,7 +177,7 @@ Get-FileHash .\TaskManager.exe -Algorithm SHA256
 # compare with the hash in SHA256SUMS.txt
 
 # Build provenance (GitHub artifact attestation)
-gh attestation verify .\TaskManager.exe --repo YOUR-GITHUB-USERNAME/taskmanager
+gh attestation verify .\TaskManager.exe --repo nithu-only/taskmanager
 ```
 
 Releases built by the `Release` workflow come from the tagged source in this repository.
@@ -189,8 +189,8 @@ so Windows shows a verified publisher instead of "Unknown publisher".
 Free code signing provided by [SignPath.io](https://signpath.io/), certificate by
 [SignPath Foundation](https://signpath.org/).
 
-- Committers and reviewers: [repository collaborators](https://github.com/YOUR-GITHUB-USERNAME/taskmanager/settings/access)
-- Approvers: [@YOUR-GITHUB-USERNAME](https://github.com/YOUR-GITHUB-USERNAME)
+- Committers and reviewers: [repository collaborators](https://github.com/nithu-only/taskmanager/settings/access)
+- Approvers: [@nithu-only](https://github.com/nithu-only)
 - Builds are produced only by the GitHub Actions workflows in `.github/workflows/`.
   Each release is reviewed and manually approved before it is signed.
 
