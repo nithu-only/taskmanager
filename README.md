@@ -201,6 +201,8 @@ Releases built by the `Release` workflow come from the tagged source in this rep
 Once the project is approved by SignPath Foundation, the exe is also Authenticode-signed,
 so Windows shows a verified publisher instead of "Unknown publisher".
 
+Maintainers: see [RELEASING.md](RELEASING.md) for the full release and signing checklist.
+
 ## Code signing policy
 
 Free code signing provided by [SignPath.io](https://signpath.io/), certificate by
