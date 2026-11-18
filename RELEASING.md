@@ -133,3 +133,14 @@ new hash. Publish a new patch version instead.
   and `attestations: write` (provenance). Signing jobs should not need anything else.
 - The signing step is a no-op until the variable exists, so forks and pull requests never
   attempt to sign.
+
+## Package-manager manifests
+
+`packaging/winget/` contains the Windows Package Manager manifests. On every release:
+
+1. Bump `PackageVersion` in all three manifest files.
+2. Update `InstallerUrl` (release tag) and `InstallerSha256`.
+3. Update `ReleaseDate` and `ReleaseNotesUrl`.
+4. Submit the updated manifests to `microsoft/winget-pkgs`.
+
+See [packaging/winget/README.md](packaging/winget/README.md) for the full steps.
